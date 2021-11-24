@@ -4,3 +4,7 @@ class Slip {
     var id: String = ""
     var advice: String = ""
 }
+
+
+
+

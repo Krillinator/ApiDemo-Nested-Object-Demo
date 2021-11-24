@@ -25,27 +25,33 @@ class MainActivity : AppCompatActivity() {
 
         val results = findViewById<TextView>(R.id.result)
 
+        // Retrofit Builder - FIRST STEP
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.adviceslip.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+
+        // Initializing Steps
         val service = retrofit.create(AdviceApi::class.java)
         val call = service.getInfo()
 
+        // Boiler-plate kod (retrofit)
         call.enqueue(object : Callback<AdviceSlip> {
+
+            // If API succeeds
             override fun onResponse(call: Call<AdviceSlip>, response: Response<AdviceSlip>) {
                 if (response.isSuccessful) {
-                    val advice = response.body()!!
 
+                    val advice = response.body()!! // response.body = Svaret
                     val stringBuilder = "Advice: \n link: ${advice.slip.advice} \n link: ${advice.slip.id}"
 
+                    // Set Text
                     results.text = stringBuilder
-
-
                 }
             }
 
+            // If API fails
             override fun onFailure(call: Call<AdviceSlip>, t: Throwable) {
                 Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_LONG).show()
                 Log.e("Debug Message",t.stackTraceToString())
